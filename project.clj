@@ -1,7 +1,7 @@
 (defproject astro "0.1.0-SNAPSHOT"
 
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :description "Astro: Activity tracker"
+  :url "https://github.com/joaofnds/astro"
 
   :dependencies [[buddy/buddy-auth "2.2.0"]
                  [buddy/buddy-core "1.6.0"]
