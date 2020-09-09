@@ -76,3 +76,28 @@
  :common/error
  (fn [db _]
    (:common/error db)))
+
+(rf/reg-sub
+ :habits
+ (fn [db]
+   (:habits db)))
+
+(rf/reg-sub
+ :form.name
+ (fn [db]
+   (get-in db [:form :name])))
+
+(rf/reg-event-db
+ :habit.new
+ (fn [db [_ habit-name]]
+   (update db :habits assoc habit-name [])))
+
+(rf/reg-event-db
+ :habit.activity.new
+ (fn [db [_ habit-name]]
+   (update-in db [:habits habit-name] conj (js/Date.))))
+
+(rf/reg-event-db
+ :form.name.changed
+ (fn [db [_ name]]
+   (assoc-in db [:form :name] name)))

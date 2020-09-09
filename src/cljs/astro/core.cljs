@@ -9,6 +9,7 @@
    [markdown.core :refer [md->html]]
    [astro.ajax :as ajax]
    [astro.events]
+   [astro.habits :as habits]
    [reitit.core :as reitit]
    [reitit.frontend.easy :as rfe]
    [clojure.string :as string])
@@ -34,6 +35,7 @@
       {:class (when @expanded? :is-active)}
       [:div.navbar-start
        [nav-link "#/" "Home" :home]
+       [nav-link "#/habits" "Habits" :habits]
        [nav-link "#/about" "About" :about]]]]))
 
 (defn about-page []
@@ -59,6 +61,8 @@
    [["/" {:name        :home
           :view        #'home-page
           :controllers [{:start (fn [_] (rf/dispatch [:page/init-home]))}]}]
+    ["/habits" {:name :habits
+                :view #'habits/habit-list}]
     ["/about" {:name :about
                :view #'about-page}]]))
 
