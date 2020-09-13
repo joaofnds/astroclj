@@ -16,15 +16,19 @@
   (str (.toLocaleDateString date) " " (.toLocaleTimeString date)))
 
 (defn show-habit [name activities register-activity]
-  [:div
+  [:div {:key name}
    [:h2 name]
-   [:button {:on-click #(rf/dispatch [:habit.activity.new name])} "Register Activity"]
+   [:button
+    {:on-click #(rf/dispatch [:habit.activity.new name])}
+    "Register Activity"]
    [:ul (for [activity activities]
-          [:li (present-date activity)])]])
+          [:li
+           {:key (.getTime activity)}
+           (present-date activity)])]])
 
 (defn habit-list []
   (let [habits (rf/subscribe [:habits])]
     [:div
      [habit-form]
-     [:div (for [[name activities] @habits]
-             [show-habit name activities])]]))
+     (for [[name activities] @habits]
+       [show-habit name activities])]))

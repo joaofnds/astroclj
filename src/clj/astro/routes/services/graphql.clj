@@ -1,24 +1,20 @@
 (ns astro.routes.services.graphql
   (:require
-    [com.walmartlabs.lacinia.util :refer [attach-resolvers]]
-    [com.walmartlabs.lacinia.schema :as schema]
-    [com.walmartlabs.lacinia :as lacinia]
-    [clojure.data.json :as json]
-    [clojure.edn :as edn]
-    [clojure.java.io :as io]
-    [ring.util.http-response :refer :all]
-    [mount.core :refer [defstate]]))
+   [com.walmartlabs.lacinia.util :refer [attach-resolvers]]
+   [com.walmartlabs.lacinia.schema :as schema]
+   [com.walmartlabs.lacinia :as lacinia]
+   [clojure.data.json :as json]
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
+   [ring.util.http-response :refer :all]
+   [mount.core :refer [defstate]]
+   [astro.routes.services.habits :as habits]
+   [cheshire.core :refer [parse-string]]))
 
-(defn get-hero [context args value]
-  (let [data  [{:id 1000
-               :name "Luke"
-               :home_planet "Tatooine"
-               :appears_in ["NEWHOPE" "EMPIRE" "JEDI"]}
-              {:id 2000
-               :name "Lando Calrissian"
-               :home_planet "Socorro"
-               :appears_in ["EMPIRE" "JEDI"]}]]
-           (first data)))
+(def resolvers {:all-habits   habits/all-habits
+                :get-habit    habits/get-habit
+                :add-habit    habits/add-habit
+                :add-activity habits/add-activity})
 
 (defstate compiled-schema
   :start
@@ -26,16 +22,13 @@
       io/resource
       slurp
       edn/read-string
-      (attach-resolvers {:get-hero get-hero
-                         :get-droid (constantly {})})
+      (attach-resolvers resolvers)
       schema/compile))
 
-(defn format-params [query]
-   (let [parsed (json/read-str query)] ;;-> placeholder - need to ensure query meets graphql syntax
-     (str "query { hero(id: \"1000\") { name appears_in }}")))
-
 (defn execute-request [query]
-    (let [vars nil
-          context nil]
+  (let [params (parse-string query true)
+        query (:query params)
+        vars (:variables params)
+        context nil]
     (-> (lacinia/execute compiled-schema query vars context)
         (json/write-str))))

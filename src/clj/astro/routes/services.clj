@@ -1,22 +1,22 @@
 (ns astro.routes.services
   (:require
-    [reitit.swagger :as swagger]
-    [reitit.swagger-ui :as swagger-ui]
-    [reitit.ring.coercion :as coercion]
-    [reitit.coercion.spec :as spec-coercion]
-    [reitit.ring.middleware.muuntaja :as muuntaja]
-    [reitit.ring.middleware.multipart :as multipart]
-    [reitit.ring.middleware.parameters :as parameters]
-    [astro.routes.services.graphql :as graphql]
-    [astro.middleware.formats :as formats]
-    [astro.middleware.exception :as exception]
-    [ring.util.http-response :refer :all]
-    [clojure.java.io :as io]))
+   [reitit.swagger :as swagger]
+   [reitit.swagger-ui :as swagger-ui]
+   [reitit.ring.coercion :as coercion]
+   [reitit.coercion.spec :as spec-coercion]
+   [reitit.ring.middleware.muuntaja :as muuntaja]
+   [reitit.ring.middleware.multipart :as multipart]
+   [reitit.ring.middleware.parameters :as parameters]
+   [astro.routes.services.graphql :as graphql]
+   [astro.middleware.formats :as formats]
+   [astro.middleware.exception :as exception]
+   [ring.util.http-response :refer :all]
+   [clojure.java.io :as io]))
 
 (defn service-routes []
   ["/api"
    {:coercion spec-coercion/coercion
-    :muuntaja formats/instance
+    ;; :muuntaja formats/instance
     :swagger {:id ::api}
     :middleware [;; query-params & form-params
                  parameters/parameters-middleware
@@ -45,12 +45,12 @@
 
     ["/api-docs/*"
      {:get (swagger-ui/create-swagger-ui-handler
-             {:url "/api/swagger.json"
-              :config {:validator-url nil}})}]]
+            {:url "/api/swagger.json"
+             :config {:validator-url nil}})}]]
 
    ["/ping"
     {:get (constantly (ok {:message "pong"}))}]
-   
+
    ["/graphql" {:no-doc true
                 :post (fn [req] (ok (graphql/execute-request (-> req :body slurp))))}]
 
