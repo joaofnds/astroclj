@@ -1,8 +1,8 @@
 (ns astro.env
   (:require
-    [selmer.parser :as parser]
-    [clojure.tools.logging :as log]
-    [astro.dev-middleware :refer [wrap-dev]]))
+   [selmer.parser :as parser]
+   [clojure.tools.logging :as log]
+   [astro.dev-middleware :refer [wrap-dev]]))
 
 (def defaults
   {:init

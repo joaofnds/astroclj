@@ -1,9 +1,9 @@
 (ns astro.db.core
   (:require
-    [datomic.api :as d]
-    [io.rkn.conformity :as c]
-    [mount.core :refer [defstate]]
-    [astro.config :refer [env]]))
+   [datomic.api :as d]
+   [io.rkn.conformity :as c]
+   [mount.core :refer [defstate]]
+   [astro.config :refer [env]]))
 
 (defstate conn
   :start (do (-> env :database-url d/create-database) (-> env :database-url d/connect))
@@ -69,7 +69,6 @@
                    :in $ ?attr ?val
                    :where [?e ?attr ?val]]
                  db attr val)))
-
 
 (defn find-user [db id]
   (d/touch (find-one-by db :user/id id)))
