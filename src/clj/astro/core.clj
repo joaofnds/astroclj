@@ -6,7 +6,8 @@
    [astro.config :refer [env]]
    [clojure.tools.cli :refer [parse-opts]]
    [clojure.tools.logging :as log]
-   [mount.core :as mount])
+   [mount.core :as mount]
+   [astro.db.core :as db])
   (:gen-class))
 
 ;; log uncaught exceptions in threads
@@ -51,6 +52,8 @@
                         mount/start-with-args
                         :started)]
     (log/info component "started"))
+  (db/install-schema db/conn)
+  (db/show-schema db/conn)
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]

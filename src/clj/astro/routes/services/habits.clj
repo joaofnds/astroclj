@@ -1,10 +1,11 @@
-(ns astro.routes.services.habits)
+(ns astro.routes.services.habits
+  (:require [astro.db.habits :as habits]))
 
-(def habits (atom {"run" {:name "run" :activities []}}))
+(def habits (atom {}))
 
 (defn all-habits
   [context args value]
-  (vals @habits))
+  (habits/all-habits))
 
 (defn get-habit
   [context {:keys [name]} value]
@@ -12,10 +13,8 @@
 
 (defn add-habit
   [context {:keys [name]} value]
-  (let [new-habit {:name name :activities []}]
-    (swap! habits assoc name new-habit)
-    new-habit))
+  (habits/add-habit name))
 
 (defn add-activity
-  [context {:keys [name date] :as payload} value]
-  (swap! habits update-in [name :activities] conj date))
+  [_ {:keys [name date]} _]
+  (habits/register-activity name date))
