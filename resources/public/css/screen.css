@@ -33,3 +33,74 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+  --color-activity-0: #ebedf0;
+  --color-activity-1: #9be9a8;
+  --color-activity-2: #40c463;
+  --color-activity-3: #30a14e;
+  --color-activity-4: #216e39;
+
+  --square-size: 15px;
+  --rows: 7;
+  --columns: 53;
+  --histogram-padding: 5px;
+}
+
+body {
+  font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif';
+}
+
+.square {
+  background-color: var(--color-activity-2);
+  border-radius: 25%;
+  height: var(--square-size);
+  width: var(--square-size);
+}
+
+.square:before {
+  background-color: rgba(70, 70, 70, 0.9);
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  color: #ececec;
+  content: attr(data-tooltip-text);
+  display: inline-block;
+  font-size: 1em;
+  opacity: 0;
+  padding: 6px 8px;
+  position: absolute;
+  transition: opacity 150ms ease-in-out;
+  visibility: hidden;
+}
+
+.square:hover:before {
+  visibility: visible;
+  opacity: 1;
+}
+
+.square.no-activity {
+  background-color: var(--color-activity-0);
+}
+
+.square.activity-1 {
+  background-color: var(--color-activity-1);
+}
+
+.square.activity-2 {
+  background-color: var(--color-activity-2);
+}
+
+.square.activity-3 {
+  background-color: var(--color-activity-3);
+}
+
+.square.activity-4 {
+  background-color: var(--color-activity-4);
+}
+
+.histogram {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(var(--rows), 1fr);
+  height: calc(var(--rows) * (var(--square-size) + var(--histogram-padding)));
+  width: calc(var(--columns) * (var(--square-size) + var(--histogram-padding)));
+}
